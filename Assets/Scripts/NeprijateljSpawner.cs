@@ -12,6 +12,7 @@ public class NeprijateljSpawner : MonoBehaviour
     public float brzina = 5f;
     private float xmax;
     private float xmin;
+    public float odgodaNastanka = 1f;
 
 
     void Start()
@@ -23,7 +24,7 @@ public class NeprijateljSpawner : MonoBehaviour
         xmax = desnaGranica.x;
         xmin = lijevaGranica.x;
 
-        OzivljavanjeNeprijatelja();
+        DodavanjeNeprijatelja();
     }
 
     void OzivljavanjeNeprijatelja()
@@ -36,6 +37,20 @@ public class NeprijateljSpawner : MonoBehaviour
 
             GameObject Neprijatelj = Instantiate(NeprijateljPrefab, child.transform.position, Quaternion.identity) as GameObject;
             Neprijatelj.transform.parent = child;
+        }
+    }
+
+    void DodavanjeNeprijatelja()
+    {
+        Transform praznaFormacija = PrvaPraznaFormacija();
+        if(praznaFormacija)
+        {
+            GameObject Neprijatelj = Instantiate(NeprijateljPrefab, praznaFormacija.transform.position, Quaternion.identity) as GameObject;
+            Neprijatelj.transform.parent = praznaFormacija;
+        }
+        if(PrvaPraznaFormacija())
+        {
+            Invoke("DodavanjeNeprijatelja", odgodaNastanka);
         }
     }
 
@@ -71,7 +86,7 @@ public class NeprijateljSpawner : MonoBehaviour
         if (AllMembersDead())
         {
             Debug.Log("praznaformacija");
-            OzivljavanjeNeprijatelja();
+            DodavanjeNeprijatelja();
         }
 
     }
@@ -88,5 +103,16 @@ public class NeprijateljSpawner : MonoBehaviour
         return true;
     }
 
+    Transform PrvaPraznaFormacija()
+    {
+        foreach (Transform childPositionGameObject in transform)
+        {
+            if(childPositionGameObject.childCount == 0)
+            {
+                return childPositionGameObject;
+            }
+        }
+        return null;
+    }
 }
 

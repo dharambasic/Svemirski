@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class KontrolaIgraca : MonoBehaviour {
 
+    public AudioClip zvukPucnja;
     public GameObject projektil;
     public float brzinaProjektila;
     public float speed = 15.0f;
@@ -48,6 +49,8 @@ public class KontrolaIgraca : MonoBehaviour {
         {
             GameObject Laser = Instantiate(projektil, transform.position, Quaternion.identity) as GameObject;
             Laser.GetComponent<Rigidbody2D>().velocity = new Vector3(0, brzinaProjektila, 0);
+            AudioSource.PlayClipAtPoint(zvukPucnja, transform.position);
+
         }
 
         if (Input.GetKey(KeyCode.A))
